@@ -1,0 +1,9 @@
+.app {
+    display: flex;
+    place-content: center;
+    place-items: center;
+    width: 100%;
+    min-height: 100vh;
+    font-family: "Inter Medium", sans-serif;
+    font-size: 1.5rem;
+}
