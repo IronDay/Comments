@@ -1,4 +1,4 @@
-import CommentSection from "./components/CommentSection/CommentSection.tsx";
+import CommentSection from "./components/CommentSection";
 import "./App.css";
 
 function App() {
