@@ -4,6 +4,7 @@ import {AiOutlineDislike, AiOutlineEllipsis, AiOutlineLike, AiOutlineRetweet} fr
 import {BsReplyFill} from "react-icons/bs";
 import {useEffect, useRef, useState} from "react";
 import {comment} from "../CommentSection/CommentSection.tsx";
+import moment from "moment";
 
 interface Props {
     comment: comment,
@@ -13,7 +14,7 @@ interface Props {
     OnPostRetweet?: () => void,
 }
 
-const Comment = ({comment: {text, likeCount, dislikeCount, retweetCount, author, replies}}: Props) => {
+const Comment = ({comment: {text, likeCount, dislikeCount, retweetCount, author, time, replies}}: Props) => {
     const [showReply, setShowReply] = useState<boolean>(false);
     /*const [post, setPost] = useState(false);*/
     const replyRef = useRef<HTMLInputElement>(null);
@@ -33,7 +34,7 @@ const Comment = ({comment: {text, likeCount, dislikeCount, retweetCount, author,
                     <header className={styles["comment__header"]}>
                             <span>
                                 <h4 className={styles["comment__user"]}>{author}</h4>
-                                <span className={styles["comment__duration"]}>3h ago</span>
+                                <span className={styles["comment__duration"]}>{moment(time).fromNow()}</span>
                             </span>
                         <button className={[styles["btn"], styles["comment__option"]].join(" ")}>
                             <AiOutlineEllipsis/>
