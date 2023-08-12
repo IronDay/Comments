@@ -31,6 +31,14 @@ const CommentSection = () => {
         setComments([...comments]);
     }
 
+    const handleCommentDislike = (id: string | number) => {
+        const comment = comments.find((comment) => comment.id === id);
+        if (comment) {
+            comment.dislikeCount ? comment.dislikeCount += 1 : comment.dislikeCount = (comment.dislikeCount = 0) + 1;
+            console.log(comments);
+        }
+        setComments([...comments]);
+    }
 
     return (
         <section className={styles["comments-section"]}>
@@ -38,7 +46,7 @@ const CommentSection = () => {
             {
                 comments.map((comment) => {
                     return <Comment key={comment.id} comment={comment} OnPostLiked={handleCommentLiking}
-                                   />
+                                    OnPostDisliked={handleCommentDislike}/>
                 })
             }
         </section>

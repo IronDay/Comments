@@ -14,7 +14,7 @@ interface Props {
     OnPostRetweet?: () => void,
 }
 
-const Comment = ({comment: {id, text, likeCount, dislikeCount, retweetCount, author, time, replies}, OnPostLiked}: Props) => {
+const Comment = ({comment: {id, text, likeCount, dislikeCount, retweetCount, author, time, replies}, OnPostLiked, OnPostDisliked}: Props) => {
     const [showReply, setShowReply] = useState<boolean>(false);
     /*const [post, setPost] = useState(false);*/
     const replyRef = useRef<HTMLInputElement>(null);
@@ -53,6 +53,7 @@ const Comment = ({comment: {id, text, likeCount, dislikeCount, retweetCount, aut
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineLike/><span
                                     className={styles["like-count"]}>{(likeCount && likeCount > 0) ? likeCount : ""}</span></button>
                                 <button
+                                    onClick={() => OnPostDisliked ? OnPostDisliked(id) : null}
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineDislike/> <span
                                     className={styles["dislike-count"]}>{(dislikeCount && dislikeCount > 0) ? dislikeCount : ""}</span></button>
                                 <button
