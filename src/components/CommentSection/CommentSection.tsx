@@ -2,7 +2,6 @@ import CommentInput from "../CommentInput";
 import profile from "../../assets/profile.jpg";
 import styles from "./CommentSection.module.css";
 import Comment from "../Comment";
-import Comments from "../../data/Comments.json";
 import {useState} from "react";
 import {v4 as uuid} from "uuid"
 
@@ -18,22 +17,28 @@ export interface comment {
 }
 
 const CommentSection = () => {
-
-    const [comments, setComments] = useState<comment>(Comments);
+    const [comments, setComments] = useState<comment[]>([] as comment[]);
     const OnAddComment = (comnt: string) => {
-        const date = Date.now();
-        setComments([{id: uuid(), time: date, author: "Margaret Symonians", text: comnt}, ...comments]);
+        setComments([{id: uuid(), time: new Date().toISOString(), author: "Margaret Symonians", text: comnt}, ...comments]);
     }
 
-    const handleCommentLiking = () => {
+    const handleCommentLiking = (id: string | number) => {
+        const comment = comments.find((comment) => comment.id === id);
+        if (comment) {
+            comment.likeCount ? comment.likeCount += 1 : comment.likeCount = (comment.likeCount = 0) + 1;
+            console.log(comments);
+        }
+        setComments([...comments]);
     }
+
 
     return (
         <section className={styles["comments-section"]}>
             <CommentInput image={profile} onSubmit={(message: string) => OnAddComment(message)}/>
             {
                 comments.map((comment) => {
-                    return <Comment key={comment.id} comment={comment}/>
+                    return <Comment key={comment.id} comment={comment} OnPostLiked={handleCommentLiking}
+                                   />
                 })
             }
         </section>

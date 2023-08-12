@@ -9,18 +9,21 @@ import moment from "moment";
 interface Props {
     comment: comment,
     OnCommentPost?: (post: comment) => void,
-    OnPostLiked?: () => void,
-    OnPostDisliked?: () => void,
+    OnPostLiked?: (id: string | number) => void,
+    OnPostDisliked?: (id: string | number) => void,
     OnPostRetweet?: () => void,
 }
 
-const Comment = ({comment: {text, likeCount, dislikeCount, retweetCount, author, time, replies}}: Props) => {
+const Comment = ({comment: {id, text, likeCount, dislikeCount, retweetCount, author, time, replies}, OnPostLiked}: Props) => {
     const [showReply, setShowReply] = useState<boolean>(false);
     /*const [post, setPost] = useState(false);*/
     const replyRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
         console.log("Show Reply: ", showReply);
     }, [showReply]);
+
+    console.log('re-render');
+
 
     return (
         <div className={styles["comments-container"]}>
@@ -46,14 +49,15 @@ const Comment = ({comment: {text, likeCount, dislikeCount, retweetCount, author,
                     <footer className={styles["comment__footer"]}>
                             <span>
                                 <button
+                                    onClick={() => OnPostLiked ? OnPostLiked(id) : null}
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineLike/><span
-                                    className={styles["like-count"]}>{likeCount}</span></button>
+                                    className={styles["like-count"]}>{(likeCount && likeCount > 0) ? likeCount : ""}</span></button>
                                 <button
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineDislike/> <span
-                                    className={styles["dislike-count"]}>{dislikeCount}</span></button>
+                                    className={styles["dislike-count"]}>{(dislikeCount && dislikeCount > 0) ? dislikeCount : ""}</span></button>
                                 <button
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineRetweet/><span
-                                    className={styles["retweet-count"]}>{retweetCount}</span></button>
+                                    className={styles["retweet-count"]}>{(retweetCount && retweetCount > 0) ? retweetCount : ""}</span></button>
                             </span>
                         <button className={[styles["btn"], styles["btn--reply"]].join(" ")}
                                 onClick={() => setShowReply(!showReply)}><BsReplyFill/>Reply
@@ -68,14 +72,7 @@ const Comment = ({comment: {text, likeCount, dislikeCount, retweetCount, author,
                                 <input ref={replyRef} className={styles["input"]} type="text"
                                        placeholder="Start the discussion"/>
                                 <button onClick={() => {
-                                    replies?.push({
-                                        id: 1,
-                                        text: replyRef.current.value,
-                                        author: "Mark Weller",
-                                        likeCount: 2,
-                                        dislikeCount: 8,
-                                        retweetCount: 8
-                                    });
+                                    replies?.push({});
                                     setShowReply(!showReply);
                                 }}>Post
                                 </button>
