@@ -29,11 +29,17 @@
 
 .comments__input.grid--1x2 {
     align-items: center;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 30px 1fr;
 }
 
-.comments__profile {
-    width: 3rem;
+.comments__profile{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comments__profile > img {
+    width: 100%;
     object-fit: cover;
     object-position: center;
     border-radius: 50%;

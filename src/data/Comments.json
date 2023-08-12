@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "author": "John G. Weller",
+    "text": "Nice to have the new book on spring security published",
+    "likeCount": 5,
+    "dislikeCount": 2,
+    "retweetCount": 4,
+    "replies": []
+  },
+  {
+    "id": 2,
+    "author": "Mark Weller",
+    "text": "Likely that you will be on top position next year to win the price",
+    "likeCount": 14,
+    "dislikeCount": 1,
+    "retweetCount": 25,
+    "replies": [
+      {
+        "id": 3,
+        "author": "Sullyvane Weller",
+        "text": "I'm just a girl willing to be with a boy",
+        "likeCount": 26,
+        "dislikeCount": 6,
+        "retweetCount": 10,
+        "replies": []
+      },
+      {
+        "id": 3,
+        "author": "Sullyvane Weller",
+        "text": "I'm just a girl willing to be with a boy",
+        "likeCount": 26,
+        "dislikeCount": 6,
+        "retweetCount": 10,
+        "replies": []
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "author": "Sullyvane Weller",
+    "text": "I'm just a girl willing to be with a boy",
+    "likeCount": 26,
+    "dislikeCount": 6,
+    "retweetCount": 10,
+    "replies": []
+  },
+  {
+    "id": 4,
+    "author": "Barbara Weller",
+    "text": "Love you sweet heart. Just be back at home before the dinner",
+    "likeCount": 20,
+    "dislikeCount": 12,
+    "retweetCount": 41,
+    "replies": []
+  }
+]

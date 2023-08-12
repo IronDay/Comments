@@ -1,3 +1,5 @@
+@import "../CommentInput/CommentInput.module.css";
+
 .grid {
     composes: grid from "../CommentInput/CommentInput.module.css";
 }
@@ -60,7 +62,7 @@
     justify-content: space-between;
 }
 
-.comment__footer > span{
+.comment__footer > span {
     display: flex;
     align-items: center;
 }
@@ -106,10 +108,57 @@
 }
 
 .reply--input {
-    margin-top: 2rem;
+    margin-top: 1rem;
     border-bottom: none;
 }
 
 .reply-input--hidden {
     display: none;
 }
+
+.reply-block {
+    width: 100%;
+    display: flex;
+    border: 1px solid rgba(128, 137, 150, 0.2);
+}
+
+.reply-block .input {
+    flex-grow: 1;
+    border-radius: 0;
+}
+
+.reply-block > button {
+    padding: 1rem 2rem;
+    border: none;
+    font-family: inherit;
+    background: #2584ff;
+    color: white;
+}
+
+.reply-block > button:hover {
+    background: #2573ff;
+    color: white;
+}
+
+.replies {
+    width: 100%;
+    /*  border: 2px dashed teal;*/
+    display: flex;
+    flex-direction: column;
+    /*align-items: end;*/
+}
+
+.replies .comment {
+    border-bottom: 1px solid rgba(128, 137, 150, 0.2);
+}
+
+.replies > .reply--input {
+    /*align-self: start;
+    flex: 1;*/
+}
+
+
+/*
+.replies .comment__body {
+    border-bottom: 1px solid rgba(128, 137, 150, 0.2);
+}*/
