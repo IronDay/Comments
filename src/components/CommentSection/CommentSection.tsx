@@ -55,8 +55,8 @@ const CommentSection = () => {
     }
 
     const handleCommentReply = (id: number | string, reply: string | null) => {
+        
         const comment = comments.find((comment) => comment.id === id);
-        console.log('handle comment reply', reply);
         if (comment && reply) {
             setComments(comments.map((comment: comment) => (
                 comment.id === id ?

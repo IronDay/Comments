@@ -2,7 +2,7 @@ import profile from "../../assets/react.svg"
 import styles from "./Comment.module.css";
 import {AiOutlineDislike, AiOutlineEllipsis, AiOutlineLike, AiOutlineRetweet} from "react-icons/ai";
 import {BsReplyFill} from "react-icons/bs";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {comment} from "../CommentSection/CommentSection.tsx";
 import moment from "moment";
 
@@ -30,6 +30,19 @@ const Comment = ({
 
     const [showReply, setShowReply] = useState<boolean>(false);
     const replyRef = useRef<HTMLInputElement>(null);
+    const textRef = useRef<HTMLParagraphElement>(null);
+
+    useEffect(() => {
+        if (text.includes("@")) {
+            const start = text.indexOf("@");
+            const end = text.indexOf(" ", start);
+            const temp = text.substring(start, end);
+
+            textRef.current && (textRef.current.innerHTML =
+                text.replace(temp, `<span style="color: #2573ff">${temp}</span>`));
+        }
+    }, [text]);
+
 
     return (
         <div className={styles["comments-container"]}>
@@ -49,7 +62,7 @@ const Comment = ({
                             <AiOutlineEllipsis/>
                         </button>
                     </header>
-                    <p className={styles["comment__text"]}>
+                    <p ref={textRef} className={styles["comment__text"]}>
                         {text}
                     </p>
                     <footer className={styles["comment__footer"]}>
