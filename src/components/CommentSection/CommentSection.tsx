@@ -27,17 +27,21 @@ const CommentSection = () => {
         }, ...comments]);
     }
 
-    const handleCommentLiking = (id: string | number) => {
-        const comment = comments.find((comment) => comment.id === id);
+    const handleCommentLiking = (id: string | number, idRootComment?: string | number) => {
+        let comment = comments.find((comment) => comment.id === id);
         if (comment) {
             comment.likeCount ?
                 comment.likeCount += 1 : comment.likeCount = (comment.likeCount = 0) + 1;
+        } else {
+            comment = comments.find((comment) => comment.id === idRootComment)
+                ?.replies?.find((reply: comment) => reply.id == id);
+            if (comment)
+                comment?.likeCount ? comment.likeCount += 1 : comment.likeCount = (comment.likeCount = 0) + 1;
         }
         setComments([...comments]);
     }
 
     const handleCommentDislike = (id: string | number, idRootComment?: string | number) => {
-        debugger
         let comment = comments.find((comment) => comment.id === id);
         if (comment) {
             comment.dislikeCount ? comment.dislikeCount += 1 : comment.dislikeCount = (comment.dislikeCount = 0) + 1;
