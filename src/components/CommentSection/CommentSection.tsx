@@ -16,17 +16,22 @@ export interface comment {
     replies?: comment[]
 }
 
+
 const CommentSection = () => {
     const [comments, setComments] = useState<comment[]>([] as comment[]);
-    const OnAddComment = (comnt: string) => {
-        setComments([{id: uuid(), time: new Date().toISOString(), author: "Margaret Symonians", text: comnt}, ...comments]);
+    const OnAddComment = (comment_text: string) => {
+        setComments([{
+            id: uuid(),
+            time: new Date().toISOString(), author: "@Simonians",
+            text: comment_text
+        }, ...comments]);
     }
 
     const handleCommentLiking = (id: string | number) => {
         const comment = comments.find((comment) => comment.id === id);
         if (comment) {
-            comment.likeCount ? comment.likeCount += 1 : comment.likeCount = (comment.likeCount = 0) + 1;
-            console.log(comments);
+            comment.likeCount ?
+                comment.likeCount += 1 : comment.likeCount = (comment.likeCount = 0) + 1;
         }
         setComments([...comments]);
     }
@@ -40,12 +45,37 @@ const CommentSection = () => {
         setComments([...comments]);
     }
 
+    const handleCommentReply = (id: number | string, reply: string | null) => {
+        const comment = comments.find((comment) => comment.id === id);
+        console.log('handle comment reply', reply);
+        if (comment && reply) {
+            setComments(comments.map((comment: comment) => (
+                comment.id === id ?
+                    {
+                        ...comment,
+                        replies: comment.replies ? [{
+                                id: uuid(), author: "@Jake",
+                                text: reply, time: new Date().toISOString()
+                            },
+                                ...comment.replies,
+                            ] :
+                            [{
+                                id: uuid(), author: "@Jake",
+                                text: reply, time: new Date().toISOString()
+                            }]
+                    }
+                    : comment)));
+        }
+    }
+
     return (
         <section className={styles["comments-section"]}>
             <CommentInput image={profile} onSubmit={(message: string) => OnAddComment(message)}/>
             {
                 comments.map((comment) => {
-                    return <Comment key={comment.id} comment={comment} OnPostLiked={handleCommentLiking}
+                    return <Comment key={comment.id} comment={comment}
+                                    OnPostReply={handleCommentReply}
+                                    OnPostLiked={handleCommentLiking}
                                     OnPostDisliked={handleCommentDislike}/>
                 })
             }

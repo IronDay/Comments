@@ -2,7 +2,7 @@ import profile from "../../assets/react.svg"
 import styles from "./Comment.module.css";
 import {AiOutlineDislike, AiOutlineEllipsis, AiOutlineLike, AiOutlineRetweet} from "react-icons/ai";
 import {BsReplyFill} from "react-icons/bs";
-import {useEffect, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import {comment} from "../CommentSection/CommentSection.tsx";
 import moment from "moment";
 
@@ -12,18 +12,24 @@ interface Props {
     OnPostLiked?: (id: string | number) => void,
     OnPostDisliked?: (id: string | number) => void,
     OnPostRetweet?: () => void,
+    OnPostReply?: (id: string | number, reply: string | null) => void
 }
 
-const Comment = ({comment: {id, text, likeCount, dislikeCount, retweetCount, author, time, replies}, OnPostLiked, OnPostDisliked}: Props) => {
+const Comment = ({
+                     comment: {
+                         id,
+                         text,
+                         likeCount,
+                         dislikeCount,
+                         retweetCount,
+                         author,
+                         time,
+                         replies
+                     }, OnPostLiked, OnPostDisliked, OnPostReply
+                 }: Props) => {
+
     const [showReply, setShowReply] = useState<boolean>(false);
-    /*const [post, setPost] = useState(false);*/
     const replyRef = useRef<HTMLInputElement>(null);
-    useEffect(() => {
-        console.log("Show Reply: ", showReply);
-    }, [showReply]);
-
-    console.log('re-render');
-
 
     return (
         <div className={styles["comments-container"]}>
@@ -71,17 +77,20 @@ const Comment = ({comment: {id, text, likeCount, dislikeCount, retweetCount, aut
                             <div className={styles["comments__profile"]}><img src={profile} alt=""/></div>
                             <div className={styles["reply-block"]}>
                                 <input ref={replyRef} className={styles["input"]} type="text"
-                                       placeholder="Start the discussion"/>
+                                       placeholder="Reply to this comment"/>
                                 <button onClick={() => {
-                                    replies?.push({});
-                                    setShowReply(!showReply);
+                                    OnPostReply && OnPostReply(id, replyRef.current && replyRef.current.value);
+                                    replyRef.current && (replyRef.current.value = "");
+                                    setShowReply(false);
                                 }}>Post
                                 </button>
                             </div>
                         </div>
                         {
-                            replies?.map((reply, id) => (
-                                <Comment key={id} comment={reply}/>))
+                            replies?.map((reply, index) => {
+                                return <Comment key={index} comment={reply}
+                                                OnPostReply={(_, rep) => OnPostReply && OnPostReply(id, `${reply.author} ${rep}`)}/>
+                            })
                         }
                     </div>
                 </div>
