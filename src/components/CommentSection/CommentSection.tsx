@@ -36,11 +36,16 @@ const CommentSection = () => {
         setComments([...comments]);
     }
 
-    const handleCommentDislike = (id: string | number) => {
-        const comment = comments.find((comment) => comment.id === id);
+    const handleCommentDislike = (id: string | number, idRootComment?: string | number) => {
+        debugger
+        let comment = comments.find((comment) => comment.id === id);
         if (comment) {
             comment.dislikeCount ? comment.dislikeCount += 1 : comment.dislikeCount = (comment.dislikeCount = 0) + 1;
-            console.log(comments);
+        } else {
+            comment = comments.find((comment) => comment.id === idRootComment)
+                ?.replies?.find((reply: comment) => reply.id == id);
+            if (comment)
+                comment?.dislikeCount ? comment.dislikeCount += 1 : comment.dislikeCount = (comment.dislikeCount = 0) + 1;
         }
         setComments([...comments]);
     }

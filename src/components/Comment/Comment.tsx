@@ -10,7 +10,7 @@ interface Props {
     comment: comment,
     OnCommentPost?: (post: comment) => void,
     OnPostLiked?: (id: string | number) => void,
-    OnPostDisliked?: (id: string | number) => void,
+    OnPostDisliked?: (id: string | number, idRootComment?: string | number) => void,
     OnPostRetweet?: () => void,
     OnPostReply?: (id: string | number, reply: string | null) => void
 }
@@ -89,7 +89,9 @@ const Comment = ({
                         {
                             replies?.map((reply, index) => {
                                 return <Comment key={index} comment={reply}
-                                                OnPostReply={(_, rep) => OnPostReply && OnPostReply(id, `${reply.author} ${rep}`)}/>
+                                                OnPostDisliked={() => OnPostDisliked && OnPostDisliked(reply.id, id)}
+                                                OnPostReply={(_, rep) =>
+                                                    OnPostReply && OnPostReply(id, `${reply.author} ${rep}`)}/>
                             })
                         }
                     </div>
