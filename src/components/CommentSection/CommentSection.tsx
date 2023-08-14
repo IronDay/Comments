@@ -27,6 +27,19 @@ const CommentSection = () => {
         }, ...comments]);
     }
 
+    const handleCommentDelete = (id: string | number, idRootComment?: string | number) => {
+        let comment = comments.find((comment) => comment.id === id);
+        if (comment) {
+            setComments(comments.filter((comment) => comment.id !== id));
+        } else {
+            comment = comments.find((comment) => comment.id === idRootComment);
+            if (comment) {
+                comment.replies = comment.replies?.filter((reply) => reply.id !== id);
+                setComments([...comments])
+            }
+        }
+    }
+
     const handleCommentLiking = (id: string | number, idRootComment?: string | number) => {
         let comment = comments.find((comment) => comment.id === id);
         if (comment) {
@@ -55,7 +68,7 @@ const CommentSection = () => {
     }
 
     const handleCommentReply = (id: number | string, reply: string | null) => {
-        
+
         const comment = comments.find((comment) => comment.id === id);
         if (comment && reply) {
             setComments(comments.map((comment: comment) => (
@@ -83,6 +96,7 @@ const CommentSection = () => {
             {
                 comments.map((comment) => {
                     return <Comment key={comment.id} comment={comment}
+                                    OnDeleteComment={handleCommentDelete}
                                     OnPostReply={handleCommentReply}
                                     OnPostLiked={handleCommentLiking}
                                     OnPostDisliked={handleCommentDislike}/>

@@ -8,6 +8,7 @@ import moment from "moment";
 
 interface Props {
     comment: comment,
+    OnDeleteComment?: (id: string | number, idRootComment?: string | number) => void,
     OnCommentPost?: (post: comment) => void,
     OnPostLiked?: (id: string | number, idRootComment?: string | number) => void,
     OnPostDisliked?: (id: string | number, idRootComment?: string | number) => void,
@@ -25,7 +26,7 @@ const Comment = ({
                          author,
                          time,
                          replies
-                     }, OnPostLiked, OnPostDisliked, OnPostReply
+                     }, OnPostLiked, OnPostDisliked, OnPostReply, OnDeleteComment
                  }: Props) => {
 
     const [showReply, setShowReply] = useState<boolean>(false);
@@ -78,7 +79,12 @@ const Comment = ({
                                 className={[styles["comment__option-list"],
                                     showOptionDropdown ? styles["option__element-show"] :
                                         styles["option__element-hidden"]].join(" ")}>
-                                <button className={styles["option__element"]}>Delete</button>
+                                <button onClick={() => {
+                                    OnDeleteComment && OnDeleteComment(id);
+                                    setShowOptionDropdown(!showOptionDropdown)
+                                }}
+                                        className={styles["option__element"]}>Delete
+                                </button>
                                 <button className={styles["option__element"]}>Edit</button>
                             </div>
                         </div>
@@ -124,6 +130,7 @@ const Comment = ({
                         {
                             replies?.map((reply, index) => {
                                 return <Comment key={index} comment={reply}
+                                                OnDeleteComment={() => OnDeleteComment && OnDeleteComment(reply.id, id)}
                                                 OnPostDisliked={() => OnPostDisliked && OnPostDisliked(reply.id, id)}
                                                 OnPostLiked={() => OnPostLiked && OnPostLiked(reply.id, id)}
                                                 OnPostReply={(_, rep) =>
