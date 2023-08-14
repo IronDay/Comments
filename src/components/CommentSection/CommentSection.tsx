@@ -9,6 +9,7 @@ export interface comment {
     id: number | string,
     text: string,
     author: string,
+    hasBeenEdited?: boolean,
     time: string,
     likeCount?: number,
     dislikeCount?: number,
@@ -33,13 +34,14 @@ const CommentSection = () => {
         let comment = comments.find((comment) => comment.id === id);
         if (comment) {
             comment.text = newText;
+            comment.hasBeenEdited = true;
             setComments([...comments]);
         } else {
             comment = comments.find((comment) => comment.id === idRootComment);
             if (comment) {
                 const temp = comment.replies?.find((reply) => reply.id === id);
                 if (temp) {
-                    comment.replies = [...comment.replies!, {...temp, text: newText}];
+                    comment.replies = [...comment.replies!, {...temp, text: newText, hasBeenEdited: true}];
                     setComments([...comments])
                 }
             }

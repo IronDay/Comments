@@ -26,6 +26,7 @@ const Comment = ({
                          retweetCount,
                          author,
                          time,
+                         hasBeenEdited,
                          replies
                      }, OnPostLiked, OnPostDisliked, OnPostReply, OnDeleteComment, OnCommentUpdate
                  }: Props) => {
@@ -90,7 +91,9 @@ const Comment = ({
                     <header className={styles["comment__header"]}>
                             <span>
                                 <h4 className={styles["comment__user"]}>{author}</h4>
-                                <span className={styles["comment__duration"]}>{moment(time).fromNow()}</span>
+                                <span id="comment__duration"
+                                      className={styles["comment__duration"]}>{moment(time).fromNow()}</span>
+                                {hasBeenEdited && <span className={styles["comment__duration"]}> (edited)</span>}
                             </span>
                         <div className={styles["comment__option-container"]}>
                             <button id="comment__option" onClick={() => setShowOptionDropdown(!showOptionDropdown)}
