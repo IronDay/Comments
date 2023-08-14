@@ -29,8 +29,17 @@ const Comment = ({
                  }: Props) => {
 
     const [showReply, setShowReply] = useState<boolean>(false);
+    const [showOptionDropdown, setShowOptionDropdown] = useState<boolean>(false);
+
     const replyRef = useRef<HTMLInputElement>(null);
     const textRef = useRef<HTMLParagraphElement>(null);
+
+    /*useEffect(() => {
+        //const target = document.getElementById("#comment__option");
+        document.querySelector("*:not(:is(#comment__option-list,#comment__option))")?.addEventListener("click", () => {
+            console.log('focus loosed');
+        });
+    })*/
 
     useEffect(() => {
         if (text.includes("@")) {
@@ -58,9 +67,22 @@ const Comment = ({
                                 <h4 className={styles["comment__user"]}>{author}</h4>
                                 <span className={styles["comment__duration"]}>{moment(time).fromNow()}</span>
                             </span>
-                        <button className={[styles["btn"], styles["comment__option"]].join(" ")}>
-                            <AiOutlineEllipsis/>
-                        </button>
+                        <div className={styles["comment__option-container"]}>
+                            <button id="comment__option" onClick={() => setShowOptionDropdown(!showOptionDropdown)}
+                                    className={[styles["btn"], styles["comment__option"]].join(" ")}>
+                                <AiOutlineEllipsis/>
+                            </button>
+
+                            <div
+                                id="#comment__option-list"
+                                className={[styles["comment__option-list"],
+                                    showOptionDropdown ? styles["option__element-show"] :
+                                        styles["option__element-hidden"]].join(" ")}>
+                                <button className={styles["option__element"]}>Delete</button>
+                                <button className={styles["option__element"]}>Edit</button>
+                            </div>
+                        </div>
+
                     </header>
                     <p ref={textRef} className={styles["comment__text"]}>
                         {text}
@@ -68,11 +90,11 @@ const Comment = ({
                     <footer className={styles["comment__footer"]}>
                             <span>
                                 <button
-                                    onClick={() => OnPostLiked ? OnPostLiked(id) : null}
+                                    onClick={() => OnPostLiked && OnPostLiked(id)}
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineLike/><span
                                     className={styles["like-count"]}>{(likeCount && likeCount > 0) ? likeCount : ""}</span></button>
                                 <button
-                                    onClick={() => OnPostDisliked ? OnPostDisliked(id) : null}
+                                    onClick={() => OnPostDisliked && OnPostDisliked(id)}
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineDislike/> <span
                                     className={styles["dislike-count"]}>{(dislikeCount && dislikeCount > 0) ? dislikeCount : ""}</span></button>
                                 <button

@@ -77,9 +77,52 @@
     align-items: center;
 }
 
+.comment__option-container {
+    position: relative;
+}
+
 .comment__option.btn {
     background-color: transparent;
 }
+
+.comment__option-list {
+    border-radius: 6px;
+    position: absolute;
+    top: 31px;
+    right: 13px;
+    background: #ECF0F4;
+    padding: 8px;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.option__element {
+    font-family: Inter, sans-serif;
+    border: 1px solid #2584ff;
+    background: #fff;
+    font-weight: 500;
+    padding: 0.5rem;
+    border-radius: 6px;
+    opacity: 0.6;
+}
+
+.option__element:hover {
+    background: #2573ff;
+    color: white;
+    opacity: 1;
+}
+
+.option__element-hidden {
+    display: none;
+    background: orangered;
+}
+
+.option__element-show {
+    display: flex;
+}
+
 
 .btn:hover,
 .comment__footer .btn:hover,
