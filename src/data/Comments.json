@@ -1,7 +1,11 @@
 [
   {
     "id": 1,
-    "author": "John G. Weller",
+    "author": {
+      "name": "John G. Weller",
+      "pseudo": "@Ironday",
+      "profile": "../assets/profile.jpg"
+    },
     "text": "Nice to have the new book on spring security published",
     "likeCount": 5,
     "dislikeCount": 2,
@@ -10,7 +14,11 @@
   },
   {
     "id": 2,
-    "author": "Mark Weller",
+    "author": {
+      "name": "Mark Weller",
+      "pseudo": "@Markday",
+      "profile": "../assets/react.svg"
+    },
     "text": "Likely that you will be on top position next year to win the price",
     "likeCount": 14,
     "dislikeCount": 1,
@@ -18,7 +26,11 @@
     "replies": [
       {
         "id": 23,
-        "author": "Sullyvane Weller",
+        "author": {
+          "name": "Sullyvane Weller",
+          "pseudo": "@Sully",
+          "profile": "../assets/react.svg"
+        },
         "text": "I'm just a girl willing to be with a boy",
         "likeCount": 26,
         "dislikeCount": 6,
@@ -27,7 +39,11 @@
       },
       {
         "id": 24,
-        "author": "Sullyvane Weller",
+        "author": {
+          "name": "Sullyvane Weller",
+          "pseudo": "@Sully",
+          "profile": "../assets/react.svg"
+        },
         "text": "I'm just a girl willing to be with a boy",
         "likeCount": 26,
         "dislikeCount": 6,
@@ -38,7 +54,11 @@
   },
   {
     "id": 3,
-    "author": "Sullyvane Weller",
+    "author": {
+      "name": "Sullyvane Weller",
+      "pseudo": "@Sully",
+      "profile": "../assets/react.svg"
+    },
     "text": "I'm just a girl willing to be with a boy",
     "likeCount": 26,
     "dislikeCount": 6,
@@ -47,7 +67,11 @@
   },
   {
     "id": 4,
-    "author": "Barbara Weller",
+    "author": {
+      "name": "Barbara Weller",
+      "pseudo": "@Bar",
+      "profile": "../assets/react.svg"
+    },
     "text": "Love you sweet heart. Just be back at home before the dinner",
     "likeCount": 20,
     "dislikeCount": 12,

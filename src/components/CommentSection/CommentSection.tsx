@@ -1,119 +1,18 @@
-import CommentInput from "../CommentInput";
-import profile from "../../assets/profile.jpg";
+import Comment,{CommentInput} from "../Comment";
+import useComment from "../../hooks/useComment.ts";
 import styles from "./CommentSection.module.css";
-import Comment from "../Comment";
-import {useState} from "react";
-import {v4 as uuid} from "uuid"
 
-export interface comment {
-    id: number | string,
-    text: string,
-    author: string,
-    hasBeenEdited?: boolean,
-    time: string,
-    likeCount?: number,
-    dislikeCount?: number,
-    retweetCount?: number,
-    replies?: comment[]
-}
-
+import profile from "../../assets/profile.jpg";
 
 const CommentSection = () => {
-    const [comments, setComments] = useState<comment[]>([] as comment[]);
-
-
-    const OnAddComment = (comment_text: string) => {
-        setComments([{
-            id: uuid(),
-            time: new Date().toISOString(), author: "@Simonians",
-            text: comment_text
-        }, ...comments]);
-    }
-
-    const handleCommentUpdate = (id: string | number, newText: string, idRootComment?: string | number) => {
-        let comment = comments.find((comment) => comment.id === id);
-        if (comment) {
-            comment.text = newText;
-            comment.hasBeenEdited = true;
-            setComments([...comments]);
-        } else {
-            comment = comments.find((comment) => comment.id === idRootComment);
-            if (comment) {
-                const temp = comment.replies?.find((reply) => reply.id === id);
-                if (temp) {
-                    comment.replies = [...comment.replies!, {...temp, text: newText, hasBeenEdited: true}];
-                    setComments([...comments])
-                }
-            }
-        }
-    }
-
-    const handleCommentDelete = (id: string | number, idRootComment?: string | number) => {
-        let comment = comments.find((comment) => comment.id === id);
-        if (comment) {
-            setComments(comments.filter((comment) => comment.id !== id));
-        } else {
-            comment = comments.find((comment) => comment.id === idRootComment);
-            if (comment) {
-                comment.replies = comment.replies?.filter((reply) => reply.id !== id);
-                setComments([...comments])
-            }
-        }
-    }
-
-    const handleCommentLiking = (id: string | number, idRootComment?: string | number) => {
-        let comment = comments.find((comment) => comment.id === id);
-        if (comment) {
-            comment.likeCount ?
-                comment.likeCount += 1 : comment.likeCount = (comment.likeCount = 0) + 1;
-        } else {
-            comment = comments.find((comment) => comment.id === idRootComment)
-                ?.replies?.find((reply: comment) => reply.id == id);
-            if (comment)
-                comment?.likeCount ? comment.likeCount += 1 : comment.likeCount = (comment.likeCount = 0) + 1;
-        }
-        setComments([...comments]);
-    }
-
-    const handleCommentDislike = (id: string | number, idRootComment?: string | number) => {
-        let comment = comments.find((comment) => comment.id === id);
-        if (comment) {
-            comment.dislikeCount ? comment.dislikeCount += 1 : comment.dislikeCount = (comment.dislikeCount = 0) + 1;
-        } else {
-            comment = comments.find((comment) => comment.id === idRootComment)
-                ?.replies?.find((reply: comment) => reply.id == id);
-            if (comment)
-                comment?.dislikeCount ? comment.dislikeCount += 1 : comment.dislikeCount = (comment.dislikeCount = 0) + 1;
-        }
-        setComments([...comments]);
-    }
-
-    const handleCommentReply = (id: number | string, reply: string | null) => {
-
-        const comment = comments.find((comment) => comment.id === id);
-        if (comment && reply) {
-            setComments(comments.map((comment: comment) => (
-                comment.id === id ?
-                    {
-                        ...comment,
-                        replies: comment.replies ? [{
-                                id: uuid(), author: "@Jake",
-                                text: reply, time: new Date().toISOString()
-                            },
-                                ...comment.replies,
-                            ] :
-                            [{
-                                id: uuid(), author: "@Jake",
-                                text: reply, time: new Date().toISOString()
-                            }]
-                    }
-                    : comment)));
-        }
-    }
-
+    const {
+        comments, handleCommentUpdate,
+        handleCommentDelete, OnAddComment,
+        handleCommentReply, handleCommentLiking, handleCommentDislike
+    } = useComment();
     return (
         <section className={styles["comments-section"]}>
-            <CommentInput image={profile} onSubmit={(message: string) => OnAddComment(message)}/>
+            <CommentInput profile={profile} onSubmit={(message: string) => OnAddComment(message)}/>
             {
                 comments.map((comment) => {
                     return <Comment key={comment.id} comment={comment}

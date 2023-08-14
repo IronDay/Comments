@@ -1,11 +1,54 @@
-@import "../CommentInput/CommentInput.module.css";
-
+/*Comment Input*/
 .grid {
-    composes: grid from "../CommentInput/CommentInput.module.css";
+    display: grid;
+    gap: 1rem;
 }
 
 .grid--1x2 {
-    composes: grid--1x2 from "../CommentInput/CommentInput.module.css";
+    grid-template-columns: 1fr 1fr;
+}
+
+.comments__input {
+    padding: 1rem;
+    background-color: #FAFBFC;
+    border-bottom: 1px solid rgba(128, 137, 150, 0.2);
+}
+
+.comments__input .input {
+    padding: 1rem;
+    border: 1px solid rgba(128, 137, 150, 0.2);
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    outline: none;
+    font-family: Roboto, sans-serif;
+    font-size: medium;
+}
+
+.input::placeholder {
+    color: #6c757d;
+}
+
+.comments__input.grid--1x2 {
+    align-items: center;
+    grid-template-columns: 30px 1fr;
+}
+
+.comments__profile{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comments__profile > img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
+
+.grid--1x2 {
+    /*composes: grid--1x2 from "../CommentInput/CommentInput.module.css";*/
     grid-template-columns: auto 1fr;
 }
 

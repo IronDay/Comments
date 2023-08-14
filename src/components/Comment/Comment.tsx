@@ -2,64 +2,50 @@ import profile from "../../assets/react.svg"
 import styles from "./Comment.module.css";
 import {AiOutlineDislike, AiOutlineEllipsis, AiOutlineLike, AiOutlineRetweet} from "react-icons/ai";
 import {BsReplyFill} from "react-icons/bs";
-import {useEffect, useRef, useState} from "react";
-import {comment} from "../CommentSection/CommentSection.tsx";
+import {KeyboardEvent} from "react";
+import {Comments} from "../../data/common.types.ts";
 import moment from "moment";
+import commentUtility from "../../utility/CommentUtility.ts";
 
-interface Props {
-    comment: comment,
-    OnCommentUpdate?: (id: string | number, newText: string, idRootComment?: string | number) => void
+interface CommentInputProps {
+    profile: string,
+    onSubmit: (message: string) => void
+}
+
+const CommentInput = ({onSubmit, profile}: CommentInputProps) => {
+    const handleCommentSubmit = (e: KeyboardEvent<HTMLInputElement>) => {
+        const target = e.currentTarget
+        if (e.key === "Enter" && target?.value.length !== 0) {
+            onSubmit(target?.value)
+        }
+    }
+    return (
+        <div className={[styles["comments__input"], styles["grid"], styles["grid--1x2"]].join(" ")}>
+            <div className={styles["comments__profile"]}><img src={profile} alt=""/></div>
+            <input className={styles.input} onKeyDown={handleCommentSubmit} type="text"
+                   placeholder="Start the discussion"/>
+        </div>
+    )
+}
+
+interface CommentProps {
+    comment: Comments,
+    OnCommentUpdate?: (id: string | number, newText: string, idRootComment?: string | number) => void,
     OnDeleteComment?: (id: string | number, idRootComment?: string | number) => void,
-    OnCommentPost?: (post: comment) => void,
+    OnCommentPost?: (post: Comments) => void,
     OnPostLiked?: (id: string | number, idRootComment?: string | number) => void,
     OnPostDisliked?: (id: string | number, idRootComment?: string | number) => void,
     OnPostRetweet?: () => void,
-    OnPostReply?: (id: string | number, reply: string | null) => void
+    OnPostReply?: (id: string | number, idRoot: number | string, reply: string | null) => void
 }
 
 const Comment = ({
-                     comment: {
-                         id,
-                         text,
-                         likeCount,
-                         dislikeCount,
-                         retweetCount,
-                         author,
-                         time,
-                         hasBeenEdited,
-                         replies
-                     }, OnPostLiked, OnPostDisliked, OnPostReply, OnDeleteComment, OnCommentUpdate
-                 }: Props) => {
+                     comment: {idRoot, id, text, likeCount, dislikeCount, retweetCount, author, time, hasBeenEdited, replies},
+                     OnPostLiked, OnPostDisliked, OnPostReply, OnDeleteComment, OnCommentUpdate
+                 }: CommentProps) => {
 
-    const [showReply, setShowReply] = useState<boolean>(false);
-    const [showOptionDropdown, setShowOptionDropdown] = useState<boolean>(false);
 
-    const replyRef = useRef<HTMLInputElement>(null);
-    const textRef = useRef<HTMLParagraphElement>(null);
-
-    const handleUpdate = (id: string | number, idCommentRoot?: string | number) => {
-        const textArea = document.createElement("textarea");
-        const p = document.createElement("p");
-
-        textArea.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                OnCommentUpdate && OnCommentUpdate(id, textArea.value, idCommentRoot);
-                p.innerText = textArea.value;
-                textRef.current && textRef.current.replaceChildren(p);
-            }
-        });
-
-        textArea.style.width = "29.9rem";
-        textArea.style.fontFamily = "Inter,sans-serif";
-
-        if (textRef.current) {
-            textArea.value = textRef.current.innerText;
-            textRef.current && textRef.current.replaceChildren(textArea);
-        }
-
-        setShowOptionDropdown(!showOptionDropdown);
-    }
-
+    //TODO:make sure that the option list is hide when it loses the focus
     /*useEffect(() => {
         //const target = document.getElementById("#comment__option");
         document.querySelector("*:not(:is(#comment__option-list,#comment__option))")?.addEventListener("click", () => {
@@ -67,17 +53,12 @@ const Comment = ({
         });
     })*/
 
-    useEffect(() => {
-        if (text.includes("@")) {
-            const start = text.indexOf("@");
-            const end = text.indexOf(" ", start);
-            const temp = text.substring(start, end);
-
-            textRef.current && (textRef.current.innerHTML =
-                text.replace(temp, `<span style="color: #2573ff">${temp}</span>`));
-        }
-    }, [text]);
-
+    const {
+        setShowOptionDropdown,
+        handleUpdate, showOptionDropdown,
+        textRef,
+        showReply, replyRef, setShowReply,
+    } = commentUtility(text, (id: string | number, updatedText: string, idCommentRoot?: string | number) => OnCommentUpdate && OnCommentUpdate(id, updatedText, idCommentRoot));
 
     return (
         <div className={styles["comments-container"]}>
@@ -90,7 +71,7 @@ const Comment = ({
                 <div className={styles["comment__body"]}>
                     <header className={styles["comment__header"]}>
                             <span>
-                                <h4 className={styles["comment__user"]}>{author}</h4>
+                                <h4 className={styles["comment__user"]}>{author.pseudo}</h4>
                                 <span id="comment__duration"
                                       className={styles["comment__duration"]}>{moment(time).fromNow()}</span>
                                 {hasBeenEdited && <span className={styles["comment__duration"]}> (edited)</span>}
@@ -106,13 +87,14 @@ const Comment = ({
                                 className={[styles["comment__option-list"],
                                     showOptionDropdown ? styles["option__element-show"] :
                                         styles["option__element-hidden"]].join(" ")}>
-                                <button onClick={() => {
-                                    OnDeleteComment && OnDeleteComment(id);
-                                    setShowOptionDropdown(!showOptionDropdown)
-                                }}
-                                        className={styles["option__element"]}>Delete
+                                <button className={styles["option__element"]}
+                                        onClick={() => {
+                                            OnDeleteComment && OnDeleteComment(id, idRoot);
+                                            setShowOptionDropdown(!showOptionDropdown)
+                                        }}>Delete
                                 </button>
-                                <button onClick={() => handleUpdate(id)} className={styles["option__element"]}>Edit
+                                <button onClick={() => handleUpdate(id, idRoot)}
+                                        className={styles["option__element"]}>Edit
                                 </button>
                             </div>
                         </div>
@@ -124,11 +106,11 @@ const Comment = ({
                     <footer className={styles["comment__footer"]}>
                             <span>
                                 <button
-                                    onClick={() => OnPostLiked && OnPostLiked(id)}
+                                    onClick={() => OnPostLiked && OnPostLiked(id, idRoot)}
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineLike/><span
                                     className={styles["like-count"]}>{(likeCount && likeCount > 0) ? likeCount : ""}</span></button>
                                 <button
-                                    onClick={() => OnPostDisliked && OnPostDisliked(id)}
+                                    onClick={() => OnPostDisliked && OnPostDisliked(id, idRoot)}
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineDislike/> <span
                                     className={styles["dislike-count"]}>{(dislikeCount && dislikeCount > 0) ? dislikeCount : ""}</span></button>
                                 <button
@@ -148,7 +130,7 @@ const Comment = ({
                                 <input ref={replyRef} className={styles["input"]} type="text"
                                        placeholder="Reply to this comment"/>
                                 <button onClick={() => {
-                                    OnPostReply && OnPostReply(id, replyRef.current && replyRef.current.value);
+                                    OnPostReply && OnPostReply(id, idRoot, replyRef.current && replyRef.current.value);
                                     replyRef.current && (replyRef.current.value = "");
                                     setShowReply(false);
                                 }}>Post
@@ -158,11 +140,12 @@ const Comment = ({
                         {
                             replies?.map((reply, index) => {
                                 return <Comment key={index} comment={reply}
-                                                OnDeleteComment={() => OnDeleteComment && OnDeleteComment(reply.id, id)}
-                                                OnPostDisliked={() => OnPostDisliked && OnPostDisliked(reply.id, id)}
-                                                OnPostLiked={() => OnPostLiked && OnPostLiked(reply.id, id)}
-                                                OnPostReply={(_, rep) =>
-                                                    OnPostReply && OnPostReply(id, `${reply.author} ${rep}`)}/>
+                                                OnCommentUpdate={(id, newText, idRootComment) => OnCommentUpdate && OnCommentUpdate(id, newText, idRootComment)}
+                                                OnDeleteComment={() => OnDeleteComment && OnDeleteComment(reply.id, reply.idRoot)}
+                                                OnPostDisliked={(id, idRootComment) => OnPostDisliked && OnPostDisliked(id, idRootComment)}
+                                                OnPostLiked={(id, idRootComment) => OnPostLiked && OnPostLiked(id, idRootComment)}
+                                                OnPostReply={(id, idRoot, rep) => OnPostReply && OnPostReply(id, idRoot, `<span>${reply.author.pseudo}</span> ${rep}`)}
+                                />
                             })
                         }
                     </div>
@@ -173,3 +156,4 @@ const Comment = ({
 }
 
 export default Comment;
+export {CommentInput};
