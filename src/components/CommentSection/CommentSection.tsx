@@ -19,12 +19,31 @@ export interface comment {
 
 const CommentSection = () => {
     const [comments, setComments] = useState<comment[]>([] as comment[]);
+
+
     const OnAddComment = (comment_text: string) => {
         setComments([{
             id: uuid(),
             time: new Date().toISOString(), author: "@Simonians",
             text: comment_text
         }, ...comments]);
+    }
+
+    const handleCommentUpdate = (id: string | number, newText: string, idRootComment?: string | number) => {
+        let comment = comments.find((comment) => comment.id === id);
+        if (comment) {
+            comment.text = newText;
+            setComments([...comments]);
+        } else {
+            comment = comments.find((comment) => comment.id === idRootComment);
+            if (comment) {
+                const temp = comment.replies?.find((reply) => reply.id === id);
+                if (temp) {
+                    comment.replies = [...comment.replies!, {...temp, text: newText}];
+                    setComments([...comments])
+                }
+            }
+        }
     }
 
     const handleCommentDelete = (id: string | number, idRootComment?: string | number) => {
@@ -96,6 +115,7 @@ const CommentSection = () => {
             {
                 comments.map((comment) => {
                     return <Comment key={comment.id} comment={comment}
+                                    OnCommentUpdate={handleCommentUpdate}
                                     OnDeleteComment={handleCommentDelete}
                                     OnPostReply={handleCommentReply}
                                     OnPostLiked={handleCommentLiking}

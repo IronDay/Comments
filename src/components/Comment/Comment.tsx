@@ -8,6 +8,7 @@ import moment from "moment";
 
 interface Props {
     comment: comment,
+    OnCommentUpdate?: (id: string | number, newText: string, idRootComment?: string | number) => void
     OnDeleteComment?: (id: string | number, idRootComment?: string | number) => void,
     OnCommentPost?: (post: comment) => void,
     OnPostLiked?: (id: string | number, idRootComment?: string | number) => void,
@@ -26,7 +27,7 @@ const Comment = ({
                          author,
                          time,
                          replies
-                     }, OnPostLiked, OnPostDisliked, OnPostReply, OnDeleteComment
+                     }, OnPostLiked, OnPostDisliked, OnPostReply, OnDeleteComment, OnCommentUpdate
                  }: Props) => {
 
     const [showReply, setShowReply] = useState<boolean>(false);
@@ -34,6 +35,29 @@ const Comment = ({
 
     const replyRef = useRef<HTMLInputElement>(null);
     const textRef = useRef<HTMLParagraphElement>(null);
+
+    const handleUpdate = (id: string | number, idCommentRoot?: string | number) => {
+        const textArea = document.createElement("textarea");
+        const p = document.createElement("p");
+
+        textArea.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                OnCommentUpdate && OnCommentUpdate(id, textArea.value, idCommentRoot);
+                p.innerText = textArea.value;
+                textRef.current && textRef.current.replaceChildren(p);
+            }
+        });
+
+        textArea.style.width = "29.9rem";
+        textArea.style.fontFamily = "Inter,sans-serif";
+
+        if (textRef.current) {
+            textArea.value = textRef.current.innerText;
+            textRef.current && textRef.current.replaceChildren(textArea);
+        }
+
+        setShowOptionDropdown(!showOptionDropdown);
+    }
 
     /*useEffect(() => {
         //const target = document.getElementById("#comment__option");
@@ -85,7 +109,8 @@ const Comment = ({
                                 }}
                                         className={styles["option__element"]}>Delete
                                 </button>
-                                <button className={styles["option__element"]}>Edit</button>
+                                <button onClick={() => handleUpdate(id)} className={styles["option__element"]}>Edit
+                                </button>
                             </div>
                         </div>
 
