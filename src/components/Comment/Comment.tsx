@@ -1,4 +1,3 @@
-import profile from "../../assets/react.svg"
 import styles from "./Comment.module.css";
 import {AiOutlineDislike, AiOutlineEllipsis, AiOutlineLike, AiOutlineRetweet} from "react-icons/ai";
 import {BsReplyFill} from "react-icons/bs";
@@ -56,7 +55,7 @@ const Comment = ({
     const {
         setShowOptionDropdown,
         handleUpdate, showOptionDropdown,
-        textRef,
+        commentTextRef,
         showReply, replyRef, setShowReply,
     } = commentUtility(text, (id: string | number, updatedText: string, idCommentRoot?: string | number) => OnCommentUpdate && OnCommentUpdate(id, updatedText, idCommentRoot));
 
@@ -65,7 +64,7 @@ const Comment = ({
             <div
                 className={[styles["grid"], styles["grid--1x2"], styles["comment"], styles["comment--root"]].join(" ")}>
                 <div className={styles["before-comment"]}>
-                    <div className={styles["comments__profile"]}><img src={profile} alt=""/></div>
+                    <div className={styles["comments__profile"]}><img src={author.profile} alt=""/></div>
                     <div className={styles["bar"]}></div>
                 </div>
                 <div className={styles["comment__body"]}>
@@ -100,11 +99,11 @@ const Comment = ({
                         </div>
 
                     </header>
-                    <p ref={textRef} className={styles["comment__text"]}>
+                    <p ref={commentTextRef} className={styles["comment__text"]}>
                         {text}
                     </p>
                     <footer className={styles["comment__footer"]}>
-                            <span>
+                            <span className={styles["comment__appreciation"]}>
                                 <button
                                     onClick={() => OnPostLiked && OnPostLiked(id, idRoot)}
                                     className={[styles["btn"], styles["btn--comment"]].join(" ")}><AiOutlineLike/><span
@@ -125,7 +124,7 @@ const Comment = ({
                         <div
                             className={[styles["comments__input"], styles["reply--input"],
                                 showReply ? "" : styles["reply-input--hidden"], styles["grid"], styles["grid--1x2"]].join(" ")}>
-                            <div className={styles["comments__profile"]}><img src={profile} alt=""/></div>
+                            <div className={styles["comments__profile"]}><img src={author.profile} alt=""/></div>
                             <div className={styles["reply-block"]}>
                                 <input ref={replyRef} className={styles["input"]} type="text"
                                        placeholder="Reply to this comment"/>
@@ -138,6 +137,7 @@ const Comment = ({
                             </div>
                         </div>
                         {
+                            /*The below modifications of the callbacks are necessary to avoid to call a double function reference inside the reply of comment's reply*/
                             replies?.map((reply, index) => {
                                 return <Comment key={index} comment={reply}
                                                 OnCommentUpdate={(id, newText, idRootComment) => OnCommentUpdate && OnCommentUpdate(id, newText, idRootComment)}

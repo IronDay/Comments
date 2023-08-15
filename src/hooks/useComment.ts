@@ -2,10 +2,12 @@ import {useState} from "react";
 import {v4 as uuid} from "uuid";
 
 import {Comments} from "../data/common.types.ts";
+import cts from "../data/Comments.ts";
 import profile from "../assets/profile.jpg";
 
 const useComment = () => {
-    const [comments, setComments] = useState<Comments[]>([] as Comments[]);
+    // const [comments, setComments] = useState<Comments[]>([] as Comments[]);
+    const [comments, setComments] = useState<Comments[]>(cts);
     const OnAddComment = (comment_text: string) => {
         setComments([{
             id: uuid(),
@@ -17,7 +19,6 @@ const useComment = () => {
     }
 
     const handleCommentUpdate = (id: string | number, newText: string, idRootComment?: string | number): void => {
-        console.log("id:", id, "idRoot:", idRootComment, "reply:", newText);
         let comment = comments.find((comment) => comment.id === id);
         if (comment) {
             comment.text = newText;
@@ -27,12 +28,10 @@ const useComment = () => {
             comment = comments.find((comment) => comment.idRoot === idRootComment);
             if (comment) {
                 const temp = comment.replies?.find((reply) => reply.id === id)
-                console.log("temp", temp);
                 if (temp) {
                     temp.text = newText;
                     temp.hasBeenEdited = true;
                     setComments([...comments]);
-                    console.log("comment", comment);
                 }
             }
         }
@@ -52,7 +51,6 @@ const useComment = () => {
     }
 
     const handleCommentLiking = (id: string | number, idRootComment?: string | number) => {
-        console.log("id:", id, "idRoot:", idRootComment);
         let comment = comments.find((comment) => comment.id === id);
         if (comment) {
             comment.likeCount ?

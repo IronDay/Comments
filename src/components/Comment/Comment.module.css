@@ -1,4 +1,14 @@
-/*Comment Input*/
+:root {
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+/*Grid*/
 .grid {
     display: grid;
     gap: 1rem;
@@ -8,6 +18,7 @@
     grid-template-columns: 1fr 1fr;
 }
 
+/*Comment Input*/
 .comments__input {
     padding: 1rem;
     background-color: #FAFBFC;
@@ -15,13 +26,15 @@
 }
 
 .comments__input .input {
+    max-width: 100%;
+    width: 100%;
     padding: 1rem;
     border: 1px solid rgba(128, 137, 150, 0.2);
     border-radius: 3px;
     background-color: #FFFFFF;
     outline: none;
-    font-family: Roboto, sans-serif;
     font-size: medium;
+    justify-self: stretch;
 }
 
 .input::placeholder {
@@ -30,44 +43,45 @@
 
 .comments__input.grid--1x2 {
     align-items: center;
-    grid-template-columns: 30px 1fr;
+    grid-template-columns: 41px 1fr;
 }
 
-.comments__profile{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.comments__profile > img {
+/*This is apply to the image of the comment input section*/
+.grid > .comments__profile > img {
     width: 100%;
+    height: 100%;
+    border: 1px solid rgba(128, 137, 150, 0.2);
+    display: block;
     object-fit: cover;
-    object-position: center;
     border-radius: 50%;
 }
 
 
-.grid--1x2 {
-    /*composes: grid--1x2 from "../CommentInput/CommentInput.module.css";*/
-    grid-template-columns: auto 1fr;
-}
-
+/*Comment*/
 .comment {
+    max-width: 100%;
+    width: 100%;
     padding: 1rem;
     border-bottom: 1px solid rgba(128, 137, 150, 0.2);
 }
 
-.before-comment {
+.comment__footer {
+    max-width: 100%;
+    width: 100%;
     display: flex;
-    gap: 5px;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.comment__footer .comment__appreciation {
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
 }
 
-.before-comment .bar {
-    width: 1px;
+.comments__profile {
+    width: 100%;
     height: 100%;
-    background-color: rgba(128, 137, 150, 0.2);
 }
 
 .comment__user {
@@ -95,29 +109,14 @@
 }
 
 .comment__text {
+    width: 100%;
     margin-top: 0.2rem;
     margin-bottom: 0.5rem;
     opacity: 0.9;
 }
 
-.comment__footer {
-    display: flex;
-    justify-content: space-between;
-}
-
-.comment__footer > span {
-    display: flex;
-    align-items: center;
-}
-
-.btn {
-    border: none;
-    padding: 0.5rem 0.8rem;
-    border-radius: 6px;
-    background-color: #bfc0c4;
-    margin-right: .5rem;
-    display: flex;
-    align-items: center;
+.comment__footer .btn {
+    background-color: #ECF0F4;
 }
 
 .comment__option-container {
@@ -128,6 +127,7 @@
     background-color: transparent;
 }
 
+/*Delete and update option*/
 .comment__option-list {
     border-radius: 6px;
     position: absolute;
@@ -143,7 +143,6 @@
 }
 
 .option__element {
-    font-family: Inter, sans-serif;
     border: 1px solid #2584ff;
     background: #fff;
     font-weight: 500;
@@ -168,6 +167,48 @@
 }
 
 
+.comments-container .grid--1x2 {
+    grid-template-columns: auto 1fr;
+}
+
+/*The image and the vertical bar in front of every comment*/
+.before-comment {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.before-comment .comments__profile {
+    width: 41px;
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.before-comment .comments__profile > img {
+    width: 100%;
+    border-radius: 50px;
+    object-fit: cover;
+    border: 2px dotted rgba(128, 137, 150, 0.2);
+}
+
+.before-comment .bar {
+    width: 1px;
+    height: 100%;
+    background-color: rgba(128, 137, 150, 0.2);
+}
+
+.btn {
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    background-color: #bfc0c4;
+    margin-right: .5rem;
+    display: flex;
+    align-items: center;
+}
+
 .btn:hover,
 .comment__footer .btn:hover,
 .btn:hover .react-icons {
@@ -184,14 +225,6 @@
 .btn > span {
     font-weight: bold;
     margin-left: 0.3rem;
-}
-
-.comment__footer .btn {
-    background-color: #ECF0F4;
-}
-
-.comment__footer .fa {
-    color: rgba(128, 137, 150, 0.9);
 }
 
 .reply--input {
@@ -217,7 +250,6 @@
 .reply-block > button {
     padding: 1rem 2rem;
     border: none;
-    font-family: inherit;
     background: #2584ff;
     color: white;
 }
@@ -229,23 +261,10 @@
 
 .replies {
     width: 100%;
-    /*  border: 2px dashed teal;*/
     display: flex;
     flex-direction: column;
-    /*align-items: end;*/
 }
 
 .replies .comment {
     border-bottom: 1px solid rgba(128, 137, 150, 0.2);
 }
-
-.replies > .reply--input {
-    /*align-self: start;
-    flex: 1;*/
-}
-
-
-/*
-.replies .comment__body {
-    border-bottom: 1px solid rgba(128, 137, 150, 0.2);
-}*/

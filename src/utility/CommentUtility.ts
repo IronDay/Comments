@@ -5,9 +5,9 @@ const CommentUtility = (text: string, OnCommentUpdate?: (id: string | number, up
     const [showOptionDropdown, setShowOptionDropdown] = useState<boolean>(false);
 
     const replyRef = useRef<HTMLInputElement>(null);
-    const textRef = useRef<HTMLParagraphElement>(null);
+    const commentTextRef = useRef<HTMLParagraphElement>(null);
 
-    //const dep = textRef.current && textRef.current.innerText;
+    /*This effect is used to add a color to the username(e.g @sully) in a comment*/
     useEffect(() => {
         if (text.includes("@")) {
             const start = text.indexOf("@");
@@ -17,23 +17,23 @@ const CommentUtility = (text: string, OnCommentUpdate?: (id: string | number, up
             if (end === -1) {
                 temp = text.substring(start, text.length);
             }
-            textRef.current && (textRef.current.innerHTML =
+            commentTextRef.current && (commentTextRef.current.innerHTML =
                 text.replace(temp, `<span style="color: #2573ff">${temp}</span>`));
         }
     }, [text]);
 
 
+    /*this function is responsible to turn the <p> of comment text into a <textarea> to update the comment*/
     const handleUpdate = (id: string | number, idCommentRoot?: string | number) => {
-        console.log('id: ', id, 'idCommentRoot: ', idCommentRoot);
         const textArea = document.createElement("textarea");
         textArea.style.width = "29.9rem";
         textArea.style.fontFamily = "Inter,sans-serif";
 
         const p = document.createElement("p");
 
-        if (textRef.current) {
-            textArea.value = textRef.current.innerText;
-            textRef.current.replaceChildren(textArea);
+        if (commentTextRef.current) {
+            textArea.value = commentTextRef.current.innerText;
+            commentTextRef.current.replaceChildren(textArea);
         }
 
         setShowOptionDropdown(!showOptionDropdown);
@@ -42,12 +42,15 @@ const CommentUtility = (text: string, OnCommentUpdate?: (id: string | number, up
             if (e.key === "Enter") {
                 OnCommentUpdate && OnCommentUpdate(id, textArea.value, idCommentRoot);
                 p.innerText = textArea.value;
-                textRef.current && textRef.current.replaceChildren(p);
+                commentTextRef.current && commentTextRef.current.replaceChildren(p);
             }
         });
     }
 
-    return {replyRef, textRef, showReply, showOptionDropdown, setShowReply, setShowOptionDropdown, handleUpdate}
+    return {
+        replyRef, commentTextRef, showReply,
+        showOptionDropdown, setShowReply, setShowOptionDropdown, handleUpdate
+    }
 }
 
 export default CommentUtility;
