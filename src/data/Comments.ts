@@ -6,12 +6,12 @@ const now = new Date();
 const Comments: Comments[] = [
     {
         id: 1,
-        isRoot:true,
-        time:now.toISOString(),
+        isRoot: true,
+        time: now.toISOString(),
         idRoot: 8,
         author: {
-            name: "John G. Weller",
-            pseudo: "@Ironday",
+            name: "John Riley",
+            pseudo: "@IronDay",
             profile: profile
         },
         text: "Nice to have the new book on spring security published",
@@ -23,14 +23,14 @@ const Comments: Comments[] = [
     {
         id: 2,
         idRoot: 9,
-        isRoot:true,
-        time:now.toISOString(),
+        isRoot: true,
+        time: now.toISOString(),
         author: {
-            name: "Mark Weller",
-            pseudo: "@Markday",
+            name: "Jimmy Raven",
+            pseudo: "@Raven",
             profile: react
         },
-        text: "Likely that you will be on top position next year to win the price",
+        text: "Likely that you will be on top position next year to win the @PGA Tour",
         likeCount: 14,
         dislikeCount: 1,
         retweetCount: 25,
@@ -38,14 +38,14 @@ const Comments: Comments[] = [
             {
                 id: 23,
                 idRoot: 9,
-                isRoot:false,
-                time:now.toISOString(),
+                isRoot: false,
+                time: now.toISOString(),
                 author: {
-                    name: "Sullyvane Weller",
-                    pseudo: "@Sully",
+                    name: "Ted Mosby",
+                    pseudo: "@Ted",
                     profile: profile
                 },
-                text: "I'm just a girl willing to be with a boy",
+                text: "I think about @Robin every single minute",
                 likeCount: 26,
                 dislikeCount: 6,
                 retweetCount: 10,
@@ -54,14 +54,14 @@ const Comments: Comments[] = [
             {
                 id: 24,
                 idRoot: 9,
-                isRoot:false,
-                time:now.toISOString(),
+                isRoot: false,
+                time: now.toISOString(),
                 author: {
                     name: "Barbara",
                     pseudo: "@Bar",
                     profile: react
                 },
-                text: "@Sully Just remember that your dad is not Ok with that",
+                text: "@Ted Just remember that your dad is not OK with that",
                 likeCount: 26,
                 dislikeCount: 6,
                 retweetCount: 10,
@@ -71,11 +71,11 @@ const Comments: Comments[] = [
     },
     {
         id: 3,
-        idRoot:10,
-        isRoot:true,
-        time:now.toISOString(),
+        idRoot: 10,
+        isRoot: true,
+        time: now.toISOString(),
         author: {
-            name: "Sullyvane Weller",
+            name: "Sullivan Conway",
             pseudo: "@Sully",
             profile: react
         },
@@ -87,11 +87,11 @@ const Comments: Comments[] = [
     },
     {
         id: 4,
-        idRoot:11,
-        isRoot:true,
-        time:now.toISOString(),
+        idRoot: 11,
+        isRoot: true,
+        time: now.toISOString(),
         author: {
-            name: "Barbara Weller",
+            name: "Barbara Gentler",
             pseudo: "@Bar",
             profile: react
         },

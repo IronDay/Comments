@@ -13,7 +13,11 @@ const CommentUtility = (text: string, OnCommentUpdate?: (id: string | number, up
         if (optionRef.current) {
             optionRef.current.addEventListener(("mouseleave"), () => {
                 setShowOptionDropdown(false);
-            })
+            });
+
+            document.querySelector(":not(#comment__option-list,#comment__option)")?.addEventListener("click", () => {
+                setShowOptionDropdown(false);
+            }, true)
         }
     }, [optionRef])
 
@@ -40,8 +44,10 @@ const CommentUtility = (text: string, OnCommentUpdate?: (id: string | number, up
         textArea.style.fontFamily = "Inter,sans-serif";
 
         const p = document.createElement("p");
+        let previousCommentText: string;
 
         if (commentTextRef.current) {
+            previousCommentText = commentTextRef.current.innerText;
             textArea.value = commentTextRef.current.innerText;
             commentTextRef.current.replaceChildren(textArea);
         }
@@ -50,7 +56,9 @@ const CommentUtility = (text: string, OnCommentUpdate?: (id: string | number, up
 
         textArea.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
-                OnCommentUpdate && OnCommentUpdate(id, textArea.value, idCommentRoot);
+                if (previousCommentText !== textArea.value) {
+                    OnCommentUpdate && OnCommentUpdate(id, textArea.value, idCommentRoot);
+                }
                 p.innerText = textArea.value;
                 commentTextRef.current && commentTextRef.current.replaceChildren(p);
             }

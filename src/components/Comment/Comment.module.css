@@ -168,7 +168,7 @@
 
 
 .comments-container .grid--1x2 {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 41px 1fr;
 }
 
 /*The image and the vertical bar in front of every comment*/
@@ -240,6 +240,25 @@
     width: 100%;
     display: flex;
     border: 1px solid rgba(128, 137, 150, 0.2);
+}
+
+/*Trick to fit an image inside a grid cell*/
+.reply--input .grid--1x2 {
+    grid-template-columns: 41px 1fr;
+}
+
+.reply--input .comments__profile{
+    width: 41px;
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.reply--input .comments__profile > img {
+    width: 100%;
+    border-radius: 50px;
+    object-fit: cover;
+    border: 2px dotted rgba(128, 137, 150, 0.2);
 }
 
 .reply-block .input {

@@ -43,15 +43,6 @@ const Comment = ({
                      OnPostLiked, OnPostDisliked, OnPostReply, OnDeleteComment, OnCommentUpdate
                  }: CommentProps) => {
 
-
-    //TODO:make sure that the option list is hide when it loses the focus
-    /*useEffect(() => {
-        //const target = document.getElementById("#comment__option");
-        document.querySelector("*:not(:is(#comment__option-list,#comment__option))")?.addEventListener("click", () => {
-            console.log('focus loosed');
-        });
-    })*/
-
     const {
         setShowOptionDropdown,
         handleUpdate, showOptionDropdown,
@@ -76,15 +67,15 @@ const Comment = ({
                                       className={styles["comment__duration"]}>{moment(time).fromNow()}</span>
                                 {hasBeenEdited && <span className={styles["comment__duration"]}> (edited)</span>}
                             </span>
-                        <div className={styles["comment__option-container"]}>
-                            <button id="comment__option" onClick={() => setShowOptionDropdown(!showOptionDropdown)}
+                        <div id="comment__option" className={styles["comment__option-container"]}>
+                            <button /*id="comment__option"*/ onClick={() => setShowOptionDropdown(!showOptionDropdown)}
                                     className={[styles["btn"], styles["comment__option"]].join(" ")}>
                                 <AiOutlineEllipsis/>
                             </button>
 
                             <div
                                 ref={optionRef}
-                                id="#comment__option-list"
+                                id="comment__option-list"
                                 className={[styles["comment__option-list"],
                                     showOptionDropdown ? styles["option__element-show"] :
                                         styles["option__element-hidden"]].join(" ")}>
