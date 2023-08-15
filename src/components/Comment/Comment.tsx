@@ -56,6 +56,7 @@ const Comment = ({
         setShowOptionDropdown,
         handleUpdate, showOptionDropdown,
         commentTextRef,
+        optionRef,
         showReply, replyRef, setShowReply,
     } = commentUtility(text, (id: string | number, updatedText: string, idCommentRoot?: string | number) => OnCommentUpdate && OnCommentUpdate(id, updatedText, idCommentRoot));
 
@@ -82,6 +83,7 @@ const Comment = ({
                             </button>
 
                             <div
+                                ref={optionRef}
                                 id="#comment__option-list"
                                 className={[styles["comment__option-list"],
                                     showOptionDropdown ? styles["option__element-show"] :

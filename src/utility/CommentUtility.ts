@@ -6,6 +6,16 @@ const CommentUtility = (text: string, OnCommentUpdate?: (id: string | number, up
 
     const replyRef = useRef<HTMLInputElement>(null);
     const commentTextRef = useRef<HTMLParagraphElement>(null);
+    const optionRef = useRef<HTMLDivElement>(null);
+
+    /*This effect is responsible to hide the optionDropDown when the mouse leaves its display area*/
+    useEffect(() => {
+        if (optionRef.current) {
+            optionRef.current.addEventListener(("mouseleave"), () => {
+                setShowOptionDropdown(false);
+            })
+        }
+    }, [optionRef])
 
     /*This effect is used to add a color to the username(e.g @sully) in a comment*/
     useEffect(() => {
@@ -48,7 +58,7 @@ const CommentUtility = (text: string, OnCommentUpdate?: (id: string | number, up
     }
 
     return {
-        replyRef, commentTextRef, showReply,
+        replyRef, commentTextRef, optionRef, showReply,
         showOptionDropdown, setShowReply, setShowOptionDropdown, handleUpdate
     }
 }
